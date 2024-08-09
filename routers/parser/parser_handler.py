@@ -205,7 +205,7 @@ async def media_command(messages: list[types.Message]):
 async def channel_post_handler(channel_post: types.Message):
     try:
         if not channel_post.media_group_id:
-            await channel_post.send_copy(chat_id='763197387', reply_markup=get_main_post_kb())  # 585028070, i-763197387
+            await channel_post.send_copy(chat_id='585028070', reply_markup=get_main_post_kb())  # 585028070, i-763197387
         else:
             print(channel_post.message_id, "медиа группа")
     except:

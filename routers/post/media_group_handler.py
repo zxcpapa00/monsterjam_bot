@@ -28,6 +28,10 @@ async def back_edit_mg_post(callback_query: types.CallbackQuery, state: FSMConte
 @flags.authorization(post_rights=True)
 async def back_publish_post_mg_tg(callback_query: types.CallbackQuery, state: FSMContext):
     messages_ids = callback_query.data.split("mgp_back_telegram_kb")[-1]
+    data = await state.get_data()
+    if data:
+        mess_bot = data.get("mess_time")
+        await mess_bot.delete()
     await state.clear()
     await callback_query.message.edit_reply_markup(reply_markup=publish_telegram_mg_kb(messages_ids))
 
@@ -389,13 +393,15 @@ async def publish_post_mg_tg_set_time(message: types.Message, state: FSMContext)
     time_str = message.text
     await message.delete()
     if not check_format(time_str):
-        bot_message = await message.answer("Не верный формат, день/месяц/год, часы:минуты")
+        bot_message = await message.answer("Не верный формат, день.месяц.год часы:минуты")
         await asyncio.sleep(3)
         await bot_message.delete()
     else:
         time_sleep = get_time_sleep(time_str)
         if time_sleep:
             data = await state.get_data()
+            mess_bot = data.get("mess_time")
+            await mess_bot.delete()
             await state.clear()
             await publish_post_mg_on_time(data.get("message"), data.get("message_ids").split("_"), time_sleep)
         else:

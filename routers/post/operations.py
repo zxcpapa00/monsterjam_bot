@@ -100,6 +100,7 @@ async def publish_post_mg_on_time(message: types.Message, messages_ids, time_sle
     chat_ids = get_channels_ids()
     if chat_ids:
         bot_message = await message.answer("Пост появиться в канале в указанное время")
+        await message.edit_reply_markup(reply_markup=end_publish_post(timedelta(seconds=time_sleep)))
         await asyncio.sleep(3)
         await bot_message.delete()
 

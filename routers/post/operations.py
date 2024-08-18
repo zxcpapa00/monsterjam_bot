@@ -44,9 +44,9 @@ def delete_signature_in_text(mess_text, new_sign):
 
 def get_time_sleep(time_str):
     tz = timezone("Europe/Moscow")
-    time_me = datetime.strptime(time_str, "%d/%m/%Y, %H:%M")
-    time_now_str = datetime.now(tz=tz).strftime("%d/%m/%Y, %H:%M")
-    time_now = datetime.strptime(time_now_str, "%d/%m/%Y, %H:%M")
+    time_me = datetime.strptime(time_str, "%d.%m.%Y %H:%M")
+    time_now_str = datetime.now(tz=tz).strftime("%d.%m.%Y %H:%M")
+    time_now = datetime.strptime(time_now_str, "%d.%m.%Y %H:%M")
     time_ = time_me - time_now
     total_sec = int(time_.total_seconds())
     if total_sec < 0:
@@ -57,7 +57,7 @@ def get_time_sleep(time_str):
 
 def check_format(time_str):
     try:
-        datetime.strptime(time_str, "%d/%m/%Y, %H:%M")
+        datetime.strptime(time_str, "%d.%m.%Y %H:%M")
         return True
     except:
         return False

@@ -272,7 +272,8 @@ async def edit_post_edit_signature_text_step2(message: types.Message, state: FSM
 
 @router.callback_query((F.data == "telegram_kb") | (F.data == "back_telegram_kb"))
 @flags.authorization(post_rights=True)
-async def publish_post_tg(callback_query: types.CallbackQuery):
+async def publish_post_tg(callback_query: types.CallbackQuery, state: FSMContext):
+    await state.clear()
     await callback_query.message.edit_reply_markup(reply_markup=publish_telegram_kb)
 
 
@@ -287,11 +288,9 @@ async def publish_post_tg_now(callback_query: types.CallbackQuery):
 async def publish_post_tg_on_time(callback_query: types.CallbackQuery, state: FSMContext):
     await callback_query.message.edit_reply_markup(reply_markup=back_publish_tg)
     bot_message = await callback_query.message.answer(
-        "Введите дату и время в формате -> день/месяц/год, часы:минуты \nПример: 04/12/2024, 15:00")
+        "Введите дату и время\nПример: 04.12.2024 15:00")
     await state.set_state(AddTimePost.add)
-    await state.update_data({"message": callback_query.message})
-    await asyncio.sleep(5)
-    await bot_message.delete()
+    await state.update_data({"message": callback_query.message, "mess_time": bot_message})
 
 
 @router.message(AddTimePost.add, F.text)
